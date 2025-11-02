@@ -23,17 +23,20 @@ public class MyLinkedList {
 
         // Go to the tail
         Node currentNode = this.head;
-        for (int i = 0; i < size - 1; i++) {
+        while (currentNode.getNext() != null) {
             currentNode = currentNode.getNext();
         }
-
+        /*
+         * for (int i = 0; i < size - 1; i++) {
+         * currentNode = currentNode.getNext();
+         * }
+         */
         currentNode.setNext(new Node(data));
         this.size++;
     }
 
     /** Returns the data of the node at the specified index. */
     public String get(int index) {
-        // TODO: Validate index, traverse and return data at index
         if (index >= this.size) {
             return null;
         }
@@ -58,6 +61,8 @@ public class MyLinkedList {
      * - Return formatted success string when found; otherwise not found
      */
     public String findDuplicateQuadsBruteForce() {
+        boolean found = false;
+        String foundString = null;
         Node firstNode = this.head;
         Node secondNode = this.head;
         for (int i = 0; i < this.size - 2; i++) {
@@ -66,7 +71,9 @@ public class MyLinkedList {
             for (int j = i; j < this.size - 1; j++) {
                 String secondString = secondNode.getData().substring(0, 4);
                 if (firstString.equals(secondString)) {
-                    return "Duplicate found: ".concat(firstString);
+                    found = true;
+                    foundString = firstString;
+                    // return "Duplicate found: ".concat(firstString);
                 }
 
                 secondNode = secondNode.getNext();
@@ -74,7 +81,12 @@ public class MyLinkedList {
 
             firstNode = firstNode.getNext();
         }
-        return "No duplicates found.";
+
+        if (found) {
+            return "Duplicate found: ".concat(foundString);
+        } else {
+            return "No duplicates found.";
+        }
     }
 
     /*
@@ -84,20 +96,16 @@ public class MyLinkedList {
      * - If seen, return success; else add to bag
      */
     public String findDuplicateQuadsOptimized() {
-        // TODO: Use MyBag to track seen quads; return as soon as duplicate found
         MyBag bag = new MyBag();
         Node currentNode = this.head;
-        while (currentNode != null) {
-            bag.add(currentNode.getData().substring(0, 4));
-            currentNode = currentNode.getNext();
-        }
-
-        currentNode = this.head;
         while (currentNode != null) {
             String data = currentNode.getData().substring(0, 4);
             if (bag.contains(data)) {
                 return "Duplicate found: ".concat(data);
             }
+
+            bag.add(data);
+            currentNode = currentNode.getNext();
         }
 
         return "No duplicates found.";
@@ -114,9 +122,10 @@ public class MyLinkedList {
      * 
      * Explanation: Both of the complexities have the worst case O(n^2) where
      * n is the size of the Linked List. Brute force has a nested loop, so
-     * it is n^2. Optimized search is does not have a nested loop, but
-     * it has a for loop which contains a MyBag lookup (which is O(n) in each
-     * iteration so it is also O(n^2).
+     * it is n^2. Optimized search does not have a nested loop, but
+     * it has a for loop which contains a MyBag lookup (which is O(n)) in each
+     * iteration so it is also O(n^2). But overall optimized one is faster since
+     * it returns when it finds a duplicate.
      * 
      * Report your timing results from the benchmarks here:
      * N=32: brute(earlyDup)= 0.019 ms, brute(noDup)= 0.018 ms,

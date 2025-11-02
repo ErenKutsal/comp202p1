@@ -1,5 +1,7 @@
 package ds;
 
+import javax.management.RuntimeErrorException;
+
 /*
  * A stack that supports getMax() in O(1) time.
  * Approach: Keep an auxiliary stack of current maxima.
@@ -10,11 +12,13 @@ public class MySpecialStack {
     // structure
 
     private MyNode top;
+    private MyNode maxHead;
     private int max;
 
     public void push(int data) {
         if (this.top == null) {
             this.top = new MyNode(data);
+            this.maxHead = new MyNode(data);
             this.max = data;
             return;
         }
@@ -23,23 +27,25 @@ public class MySpecialStack {
         newTop.setNext(this.top);
         this.top = newTop;
         if (data > this.max) {
+            MyNode newMax = new MyNode(data);
+            newMax.setNext(this.maxHead);
+            this.maxHead = newMax;
             this.max = data;
         }
     }
 
     public int pop() {
+        if (this.top == null) {
+            throw new RuntimeException("No node left in stack!");
+        }
+
         MyNode newTop = this.top.getNext();
         int popped = this.top.getData();
         this.top = newTop;
 
-        MyNode currentNode = this.top;
-        this.max = currentNode.getData();
-        while ((currentNode = currentNode.getNext()) != null) {
-            int data = currentNode.getData();
-            if (data > this.max) {
-                this.max = data;
-            }
-
+        if (popped == this.max) {
+            this.maxHead = this.maxHead.getNext();
+            this.max = this.maxHead.getData();
         }
 
         return popped;

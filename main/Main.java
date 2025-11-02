@@ -24,18 +24,33 @@ public class Main {
         list.add("Three");
         list.add("Four");
         list.add("Five");
-        
+
         // Test add method (10 pts)
         boolean addWorks = list.size() == 5;
-        if (addWorks) { System.out.println("PASS: Add method"); score += 10; } else { System.out.println("FAIL: Add method"); }
-        
+        if (addWorks) {
+            System.out.println("PASS: Add method");
+            score += 10;
+        } else {
+            System.out.println("FAIL: Add method");
+        }
+
         // Test size method (10 pts)
         boolean sizeWorks = list.size() == 5;
-        if (sizeWorks) { System.out.println("PASS: Size method"); score += 10; } else { System.out.println("FAIL: Size method"); }
-        
+        if (sizeWorks) {
+            System.out.println("PASS: Size method");
+            score += 10;
+        } else {
+            System.out.println("FAIL: Size method");
+        }
+
         // Test get method (10 pts)
         boolean getWorks = "Three".equals(list.get(2));
-        if (getWorks) { System.out.println("PASS: Get method"); score += 10; } else { System.out.println("FAIL: Get method"); }
+        if (getWorks) {
+            System.out.println("PASS: Get method");
+            score += 10;
+        } else {
+            System.out.println("FAIL: Get method");
+        }
 
         // Brute force duplicate detection (10 pts)
         MyLinkedList listBF = new MyLinkedList();
@@ -77,25 +92,39 @@ public class Main {
         s.push(1);
         s.push(5);
         s.push(2);
-        
+
         // Test getMax after pushes (10 pts)
         boolean maxAfterPush = s.getMax() == 5;
-        if (maxAfterPush) { System.out.println("PASS: getMax after pushes"); score += 10; } else { System.out.println("FAIL: getMax after pushes"); }
+        if (maxAfterPush) {
+            System.out.println("PASS: getMax after pushes");
+            score += 10;
+        } else {
+            System.out.println("FAIL: getMax after pushes");
+        }
 
         // Test getMax after non-max pop (10 pts)
         int p1 = s.pop(); // 2
         boolean stillMax = s.getMax() == 5 && p1 == 2;
-        if (stillMax) { System.out.println("PASS: getMax after non-max pop"); score += 10; } else { System.out.println("FAIL: getMax after non-max pop"); }
+        if (stillMax) {
+            System.out.println("PASS: getMax after non-max pop");
+            score += 10;
+        } else {
+            System.out.println("FAIL: getMax after non-max pop");
+        }
 
         // Test getMax after max pop (10 pts)
         int p2 = s.pop(); // 5
         boolean maxAfterPopMax = s.getMax() == 3 && p2 == 5;
-        if (maxAfterPopMax) { System.out.println("PASS: getMax after max pop"); score += 10; } else { System.out.println("FAIL: getMax after max pop"); }
+        if (maxAfterPopMax) {
+            System.out.println("PASS: getMax after max pop");
+            score += 10;
+        } else {
+            System.out.println("FAIL: getMax after max pop");
+        }
 
         totalScore += score;
         System.out.println("Part 2 Score: " + score + "/30");
     }
-
 
     private static void runComplexityBenchmarks() {
         System.out.println("\n\n======= Complexity Benchmarks =======");
@@ -105,14 +134,15 @@ public class Main {
             long bruteEarly = timeBrute(n, true, 3);
             boolean skipBruteNoDup = n >= (1 << 12);
             Long bruteNoneVal = skipBruteNoDup ? null : timeBrute(n, false, 1);
-            long optEarly = timeOptimized(n, true, 3);
+            long optEarly = timeOptimized(n, true, 1);
             long optNone = timeOptimized(n, false, 1);
 
             String bruteNoneStr = (bruteNoneVal == null) ? "skipped" : formatMs(bruteNoneVal);
             System.out.println("N=" + n + ": brute(earlyDup)=" + formatMs(bruteEarly) + ", brute(noDup)=" + bruteNoneStr
                     + ", opt(earlyDup)=" + formatMs(optEarly) + ", opt(noDup)=" + formatMs(optNone));
         }
-        System.out.println("(Note: Students should run and report all the cases and  estimate time for skipped cases on their complexity analysis part.)");
+        System.out.println(
+                "(Note: Students should run and report all the cases and  estimate time for skipped cases on their complexity analysis part.)");
     }
 
     private static long timeBrute(int n, boolean earlyDuplicate, int trials) {
@@ -123,13 +153,18 @@ public class Main {
                 // place a duplicate very early to short-circuit
                 list.add("ABCD_0");
                 list.add("ABCD_1"); // duplicate quad early
-                for (int i = 2; i < n; i++) list.add(randomQuad(i));
+                for (int i = 2; i < n; i++)
+                    list.add(randomQuad(i));
             } else {
                 // all unique quads
-                for (int i = 0; i < n; i++) list.add(uniqueQuad(i));
+                for (int i = 0; i < n; i++)
+                    list.add(uniqueQuad(i));
             }
             long start = System.nanoTime();
-            if (earlyDuplicate) list.findDuplicateQuadsOptimized(); else list.findDuplicateQuadsOptimized();
+            if (earlyDuplicate)
+                list.findDuplicateQuadsBruteForce();
+            else
+                list.findDuplicateQuadsBruteForce();
             long end = System.nanoTime();
             total += (end - start);
         }
@@ -143,12 +178,17 @@ public class Main {
             if (earlyDuplicate) {
                 list.add("WXYZ_0");
                 list.add("WXYZ_1"); // duplicate quad early
-                for (int i = 2; i < n; i++) list.add(randomQuad(i + 1000));
+                for (int i = 2; i < n; i++)
+                    list.add(randomQuad(i + 1000));
             } else {
-                for (int i = 0; i < n; i++) list.add(uniqueQuad(i + 2000));
+                for (int i = 0; i < n; i++)
+                    list.add(uniqueQuad(i + 2000));
             }
             long start = System.nanoTime();
-            if (earlyDuplicate) list.findDuplicateQuadsOptimized(); else list.findDuplicateQuadsOptimized();
+            if (earlyDuplicate)
+                list.findDuplicateQuadsOptimized();
+            else
+                list.findDuplicateQuadsOptimized();
             long end = System.nanoTime();
             total += (end - start);
         }
@@ -161,7 +201,8 @@ public class Main {
         int b = (i / (26 * 26)) % 26;
         int c = (i / 26) % 26;
         int d = i % 26;
-        return new String(new char[] { (char) ('A' + a), (char) ('A' + b), (char) ('A' + c), (char) ('A' + d) }) + "_" + i;
+        return new String(new char[] { (char) ('A' + a), (char) ('A' + b), (char) ('A' + c), (char) ('A' + d) }) + "_"
+                + i;
     }
 
     private static String randomQuad(int seed) {
@@ -179,10 +220,13 @@ public class Main {
 
     private static String formatMs(long nanos) {
         double ms = nanos / 1_000_000.0;
-        if (ms < 1.0) return String.format("%.3f ms", ms);
-        if (ms < 1000.0) return String.format("%.2f ms", ms);
+        if (ms < 1.0)
+            return String.format("%.3f ms", ms);
+        if (ms < 1000.0)
+            return String.format("%.2f ms", ms);
         double s = ms / 1000.0;
-        if (s < 60.0) return String.format("%.2f s", s);
+        if (s < 60.0)
+            return String.format("%.2f s", s);
         double m = s / 60.0;
         return String.format("%.2f min", m);
     }

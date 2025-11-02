@@ -7,13 +7,13 @@ package ds;
  * singly linked list to support add and contains operations.
  */
 public class MyBag {
+
     private Node head;
 
     /**
      * Adds a new data element to the bag by inserting at the head of the list.
      */
     public void add(String data) {
-        // TODO: Create a new Node and push it to the front of the list
         if (head == null) {
             this.head = new Node(data);
             return;
@@ -29,7 +29,6 @@ public class MyBag {
      * Return true on the first match; otherwise false after traversal.
      */
     public boolean contains(String data) {
-        // TODO: Traverse from head and compare values (handle null safely)
         Node currentNode = this.head;
         while (currentNode != null) {
             if (currentNode.getData().equals(data)) {
